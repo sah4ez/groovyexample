@@ -18,9 +18,9 @@ class Repository {
         return all
     }
 
-    void add(Item item) {
-        if (!allowedItems.contains(item.name) || this.free() < item.value) {
-            return
+    boolean add(Item item) {
+        if (!allowedItems.contains(item.type) || this.free() < item.value) {
+            return false
         }
         this.items.add(item)
     }

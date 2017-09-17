@@ -36,7 +36,35 @@ class RepositoryProblem implements Problem<RepositorySolution> {
 
     @Override
     void evaluate(RepositorySolution solution) {
-        println "Hi!)) Me need implement"
+        items.sort({ !it.necessary })
+        int notAdded = 0
+        def indexes = randomIndex(repositories.size())
+        repositories.forEach({it.items.clear()})
+        items.forEach({
+            def item = it
+            boolean added
+            indexes.forEach({
+                if (!added){
+                    repositories[it].add(item) ? added = true : {}
+                }
+            })
+            added ? {} : notAdded++
+        })
+        indexes.forEach({ solution.variables[it] = repositories[it].free() })
+        solution.setObjective(0, solution.free())
+        solution.setObjective(1, notAdded)
+    }
+
+    static Set<Integer> randomIndex(int len) {
+        Set<Integer> result = new HashSet<>(len)
+        Random random = new Random()
+        while (result.size() != len) {
+            def i = random.nextInt(len)
+            if (!result.contains(i)) {
+                result.add(i)
+            }
+        }
+        result
     }
 
     @Override

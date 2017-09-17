@@ -10,11 +10,17 @@ class RepositorySolution extends AbstractGenericSolution<Repository, RepositoryP
      */
     protected RepositorySolution(RepositoryProblem problem) {
         super(problem)
+        problem.repositories.forEach({it.items.clear()})
+        problem.repositories.forEach({variables.add(it.free())})
     }
 
     RepositorySolution(RepositorySolution solution) {
         super(solution.problem)
         this.variables = variables
+    }
+
+    Object getObjectives(int index){
+        return this.getObjective(index)
     }
 
     @Override
@@ -27,7 +33,7 @@ class RepositorySolution extends AbstractGenericSolution<Repository, RepositoryP
         return new RepositorySolution(this)
     }
 
-    Integer free() {
+    int free() {
         def all = 0
         variables.forEach({all += it})
         all
